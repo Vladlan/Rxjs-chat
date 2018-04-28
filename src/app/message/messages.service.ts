@@ -3,13 +3,11 @@ import {Message} from './message.model';
 import {Thread} from '../thread/thread.model';
 import {Observable} from 'rxjs/Observable';
 import {User} from '../user/user.model';
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
 const initialMessages: Message[] = [];
 
-interface IMessagesOperation extends Function {
-  ( messages: Message[] ): Message[];
-}
+type IMessagesOperation = ( messages: Message[] ) => Message[];
 
 @Injectable()
 export class MessagesService {

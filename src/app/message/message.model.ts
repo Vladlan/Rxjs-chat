@@ -1,6 +1,6 @@
 import {User} from '../user/user.model';
 import {Thread} from '../thread/thread.model';
-const uuid = require('uuid/v1');
+import uuid from 'uuid/v1';
 
 
 export class Message {

@@ -1,6 +1,7 @@
 import {Message} from '../message/message.model';
 
-const uuid = require('uuid/v1');
+import uuid from 'uuid/v1';
+
 
 export class Thread {
   id: string;

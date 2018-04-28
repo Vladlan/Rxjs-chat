@@ -1,4 +1,5 @@
-const uuid = require('uuid/v1');
+import uuid from 'uuid/v1';
+
 
 
 export class User {
