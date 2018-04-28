@@ -131,23 +131,76 @@ function createSubscribe(name) {
 
 
 //#6
-Rx.Observable.interval(1000)
-  .map(x => x * 2)
-  .take(10)
-  .subscribe(createSubscribe('map'));
+// Rx.Observable.interval(1000)
+//   .map(x => x * 2)
+//   .take(10)
+//   .subscribe(createSubscribe('map'));
+//
+// Rx.Observable.of('hello', 'world', 'wfm')
+//   .map(x => x.toUpperCase())
+//   .subscribe(createSubscribe('of'));
+//
+// Rx.Observable.fromEvent(document.querySelector('input'), 'keyup')
+//   .pluck('target', 'value')
+//   // .map( x => x.target.value)
+//   // .map( x => x.toUpperCase() )
+//   // .map( x => {
+//   //   return {
+//   //     value: x,
+//   //     length: x.length
+//   //   }
+//   // })
+//   .subscribe(createSubscribe('keyUp'));
 
-Rx.Observable.of('hello', 'world', 'wfm')
-  .map(x => x.toUpperCase())
-  .subscribe(createSubscribe('of'));
 
-Rx.Observable.fromEvent(document.querySelector('input'), 'keyup')
-  .pluck('target', 'value')
-  // .map( x => x.target.value)
-  // .map( x => x.toUpperCase() )
-  // .map( x => {
-  //   return {
-  //     value: x,
-  //     length: x.length
-  //   }
-  // })
-  .subscribe(createSubscribe('keyUp'));
+//#7
+Rx.Observable.of(1, 5, 'str')
+  .first()
+  .subscribe(createSubscribe('first'));
+
+Rx.Observable.of(1, 5, 'str')
+  .last()
+  .subscribe(createSubscribe('last'));
+
+Rx.Observable.of(1, 5, 'str')
+  .find(x => x === 5)
+  .subscribe(createSubscribe('find'));
+
+Rx.Observable.of(1, 5, 'STR')
+  .find(x => {
+      if (typeof x === 'string')
+        return x.toLowerCase() === 'str'
+    }
+  )
+  .subscribe(createSubscribe('find 2'));
+
+Rx.Observable.of(1, 5, 'STR')
+  .findIndex(x => x === 'STR')
+  .subscribe(createSubscribe('findIndex'));
+
+
+Rx.Observable.of(1, 5, 'STR')
+  .take(2)
+  .subscribe(createSubscribe('take'));
+
+Rx.Observable.of(1, 5, 'STR')
+  .skip(2)
+  .subscribe(createSubscribe('skip'));
+
+
+Rx.Observable.of(1, 5, 2, 5, 6 , 'STR', 'STR2')
+  .skipWhile( x => {
+    return typeof x === 'number';
+  })
+  .subscribe(createSubscribe('skipWhile'));
+
+
+Rx.Observable.interval(500)
+  .skipWhile( x => x < 4)
+  .takeWhile( x => x < 10)
+  .subscribe(createSubscribe('skipWhile-Interval-TakeWhile'));
+
+Rx.Observable.interval( 400 )
+.skipUntil(Rx.Observable.timer(8000))
+  .takeUntil(Rx.Observable.timer(11000))
+.subscribe(createSubscribe('skipUntil_takeUntil'));
