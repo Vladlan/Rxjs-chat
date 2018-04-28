@@ -75,24 +75,36 @@ function createSubscribe(name) {
     }
   }
 }
+//
+// Rx.Observable.of(5, 6, 7, 8, [12,1231,1231])
+//   .subscribe(
+//     // (x) => {
+//     //   console.log('next: ', x);
+//     // },
+//     // (err) => console.log('err = ', err),
+//     // () => console.log('Completed')
+//     createSubscribe('of')
+//   );
+//
+// Rx.Observable.interval(1000)
+//   .take(4)
+//   .subscribe(createSubscribe('interval'));
+//
+// Rx.Observable.timer(3000, 500)
+//   .take(10)
+//   .subscribe(createSubscribe('timer'));
+//
+// Rx.Observable.range(5, 15)
+//   .subscribe(createSubscribe('range'));
 
-Rx.Observable.of(5, 6, 7, 8, [12,1231,1231])
-  .subscribe(
-    // (x) => {
-    //   console.log('next: ', x);
-    // },
-    // (err) => console.log('err = ', err),
-    // () => console.log('Completed')
-    createSubscribe('of')
-  );
+//#4
+Rx.Observable.from([1, 2, 3, 4]).
+  subscribe(createSubscribe('from'));
 
-Rx.Observable.interval(1000)
-  .take(4)
-  .subscribe(createSubscribe('interval'));
+let someSet = new Set([1, 2, 3, 4 , {id: '31223'}, {id: 11412} ]);
+Rx.Observable.from(someSet).
+  subscribe(createSubscribe('from_set'));
 
-Rx.Observable.timer(3000, 500)
-  .take(10)
-  .subscribe(createSubscribe('timer'));
-
-Rx.Observable.range(5, 15)
-  .subscribe(createSubscribe('range'));
+let map = new Map([[1,2], [3,4], [5,6]]);
+Rx.Observable.from(map)
+.subscribe(createSubscribe('from_map'));
