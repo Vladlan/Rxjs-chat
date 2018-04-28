@@ -75,6 +75,7 @@ function createSubscribe(name) {
     }
   }
 }
+
 //
 // Rx.Observable.of(5, 6, 7, 8, [12,1231,1231])
 //   .subscribe(
@@ -98,13 +99,32 @@ function createSubscribe(name) {
 //   .subscribe(createSubscribe('range'));
 
 //#4
-Rx.Observable.from([1, 2, 3, 4]).
-  subscribe(createSubscribe('from'));
+// Rx.Observable.from([1, 2, 3, 4]).
+//   subscribe(createSubscribe('from'));
+//
+// let someSet = new Set([1, 2, 3, 4 , {id: '31223'}, {id: 11412} ]);
+// Rx.Observable.from(someSet).
+//   subscribe(createSubscribe('from_set'));
+//
+// let map = new Map([[1,2], [3,4], [5,6]]);
+// Rx.Observable.from(map)
+// .subscribe(createSubscribe('from_map'));
 
-let someSet = new Set([1, 2, 3, 4 , {id: '31223'}, {id: 11412} ]);
-Rx.Observable.from(someSet).
-  subscribe(createSubscribe('from_set'));
+//#5
+function delay(ms = 1000) {
+  return new Promise( (resolve, reject) => {
+      setTimeout(() => {
+        resolve(msgit);
+      }, ms)
+    }
+  );
+}
 
-let map = new Map([[1,2], [3,4], [5,6]]);
-Rx.Observable.from(map)
-.subscribe(createSubscribe('from_map'));
+delay(3000).then(() => {
+    console.log('Promise was resolved');
+  }
+);
+
+const p$ = Rx.Observable.fromPromise(delay(2000));
+
+p$.subscribe(createSubscribe('fromPromise'));
