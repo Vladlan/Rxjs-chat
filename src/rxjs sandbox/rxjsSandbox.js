@@ -111,20 +111,43 @@ function createSubscribe(name) {
 // .subscribe(createSubscribe('from_map'));
 
 //#5
-function delay(ms = 1000) {
-  return new Promise( (resolve, reject) => {
-      setTimeout(() => {
-        resolve(msgit);
-      }, ms)
-    }
-  );
-}
+// function delay(ms = 1000) {
+//   return new Promise( (resolve, reject) => {
+//       setTimeout(() => {
+//         resolve(msgit);
+//       }, ms)
+//     }
+//   );
+// }
+//
+// delay(3000).then(() => {
+//     console.log('Promise was resolved');
+//   }
+// );
+//
+// const p$ = Rx.Observable.fromPromise(delay(2000));
+//
+// p$.subscribe(createSubscribe('fromPromise'));
 
-delay(3000).then(() => {
-    console.log('Promise was resolved');
-  }
-);
 
-const p$ = Rx.Observable.fromPromise(delay(2000));
+//#6
+Rx.Observable.interval(1000)
+  .map(x => x * 2)
+  .take(10)
+  .subscribe(createSubscribe('map'));
 
-p$.subscribe(createSubscribe('fromPromise'));
+Rx.Observable.of('hello', 'world', 'wfm')
+  .map(x => x.toUpperCase())
+  .subscribe(createSubscribe('of'));
+
+Rx.Observable.fromEvent(document.querySelector('input'), 'keyup')
+  .pluck('target', 'value')
+  // .map( x => x.target.value)
+  // .map( x => x.toUpperCase() )
+  // .map( x => {
+  //   return {
+  //     value: x,
+  //     length: x.length
+  //   }
+  // })
+  .subscribe(createSubscribe('keyUp'));
