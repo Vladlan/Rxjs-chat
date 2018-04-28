@@ -39,25 +39,60 @@
 // );
 
 //#2
-let button = document.querySelector('button');
+// let button = document.querySelector('button');
+//
+// let btn$ = Rx.Observable.fromEvent(button, 'click');
+//
+// btn$.subscribe(function(e) {
+//     console.log(e);
+//     console.log('clicked');
+//   }
+// );
+//
+// Rx.Observable.fromEvent(document.querySelector('input'), 'keyup')
+//   .subscribe((e) => {
+//       console.log(e);
+//     }
+//   );
+//
+// Rx.Observable.fromEvent(document, 'mousemove')
+//   .subscribe(e => {
+//       document.querySelector('h1').innerHTML = ` X: ${e.clientX}, Y: ${e.clientY}`;
+//     }
+//   );
 
-let btn$ = Rx.Observable.fromEvent(button, 'click');
-
-btn$.subscribe(function(e) {
-    console.log(e);
-    console.log('clicked');
+//#3
+function createSubscribe(name) {
+  return {
+    next(x) {
+      console.log(name, ': ', x);
+    },
+    error(err) {
+      console.log('Error: ', err);
+    },
+    complete() {
+      console.log(name, ' completed.');
+    }
   }
-);
+}
 
-Rx.Observable.fromEvent(document.querySelector('input'), 'keyup')
-  .subscribe((e) => {
-      console.log(e);
-    }
+Rx.Observable.of(5, 6, 7, 8, [12,1231,1231])
+  .subscribe(
+    // (x) => {
+    //   console.log('next: ', x);
+    // },
+    // (err) => console.log('err = ', err),
+    // () => console.log('Completed')
+    createSubscribe('of')
   );
 
-Rx.Observable.fromEvent(document, 'mousemove')
-  .subscribe(e => {
-      document.querySelector('h1').innerHTML = ` X: ${e.clientX}, Y: ${e.clientY}`;
-    }
-  );
+Rx.Observable.interval(1000)
+  .take(4)
+  .subscribe(createSubscribe('interval'));
 
+Rx.Observable.timer(3000, 500)
+  .take(10)
+  .subscribe(createSubscribe('timer'));
+
+Rx.Observable.range(5, 15)
+  .subscribe(createSubscribe('range'));
