@@ -305,6 +305,7 @@ function createSubscribe(name) {
 //   .subscribe(createSubscribe('let'));
 
 // #11
+
 // const s1$ = Rx.Observable.of('Hello');
 // const s2$ = Rx.Observable.of('World');
 //
@@ -320,21 +321,56 @@ function createSubscribe(name) {
 //   .map(x => Rx.Observable.range(1, 4))
 //   .mergeAll()
 //   .subscribe(createSubscribe('mergeAll'));
+//
+// const s1$ = Rx.Observable.from([1,2,3]);
+// const s2$ = Rx.Observable.from([4,5,6]);
+//
+// Rx.Observable.concat(s1$, s2$).subscribe(createSubscribe('concat'));
+//
+// Rx.Observable.range(1, 3)
+//   .map(x => Rx.Observable.range(x, 3))
+//   .concatAll()
+//   .subscribe(createSubscribe('concatAll'));
 
-const s1$ = Rx.Observable.from([1,2,3]);
-const s2$ = Rx.Observable.from([4,5,6]);
+// #12
 
-Rx.Observable.concat(s1$, s2$).subscribe(createSubscribe('concat'));
+// Rx.Observable.of('Hello')
+//   .subscribe(x => {
+//     Rx.Observable.of(x + ' World')
+//       .subscribe(createSubscribe('mergeMap'))
+//   });
 
-Rx.Observable.range(1, 3)
-  .map(x => Rx.Observable.range(x, 3))
-  .concatAll()
-  .subscribe(createSubscribe('concatAll'));
-
-
-
-
+// Rx.Observable.of('Hello')
+//   .mergeMap(x => {return Rx.Observable.of(x + ' World')})
+//   .subscribe(createSubscribe('mergeMap'));
 
 
+// const promise = (data) => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout( () => {
+//       resolve(data + ' World');
+//     }, 2000);
+//   });
+// };
+//
+// Rx.Observable.of('Hello')
+//   .mergeMap((x) => {
+//   return promise(x);
+//   })
+//   .subscribe(createSubscribe('promise'));
+
+Rx.Observable.range(1, 4)
+  .concatMap( (x, i) => Rx.Observable.interval(200)
+    .take(x)
+    .map(i => i)
+  )
+  .subscribe(createSubscribe('concatMap'));
+
+Rx.Observable.range(1, 10)
+  .concatMap( (x, i) => Rx.Observable.interval(100)
+    .take(x)
+    .map(q => i)
+  )
+  .subscribe(createSubscribe('concatMap'));
 
 
