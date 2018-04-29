@@ -254,22 +254,49 @@ function createSubscribe(name) {
 //   .subscribe(createSubscribe('distinctUntilChange'));
 
 
-//9
+// #9
 // Rx.Observable.interval(500)
 // .buffer(Rx.Observable.interval(3000))
 //   .take(5 )
 // .subscribe(createSubscribe('buffer'));
-
+//
 // Rx.Observable.interval(500)
 //   .bufferTime(3000)
 //   .take(2 )
 //   .subscribe(createSubscribe('bufferTime(x) === buffer(Rx.Observable.interval(x)'));
-
+//
 // Rx.Observable.range(0, 40)
 //   .bufferCount(4)
 //   .subscribe(createSubscribe('bufferCount'));
+//
+// Rx.Observable.interval(1000)
+// .buffer(Rx.Observable.fromEvent(document, 'click'))
+//   .map( x => x.length )
+// .subscribe(createSubscribe('buffer'));
 
-Rx.Observable.interval(1000)
-.buffer(Rx.Observable.fromEvent(document, 'click'))
-  .map( x => x.length )
-.subscribe(createSubscribe('buffer'));
+
+// #10
+Rx.Observable.of(2)
+  .defaultIfEmpty('I am empty stream')
+  .subscribe(createSubscribe('of'));
+
+Rx.Observable.from([1, 2, 3, 4, 5, 6])
+// .map(x => x * 2)
+  .every(x => x % 2 === 0)
+  .subscribe(createSubscribe('every'));
+
+Rx.Observable.from([101, 102, 103, 104])
+  .do(x => console.log('x: ', x))
+  .map(x => x * x)
+  .subscribe(createSubscribe('do'));
+
+
+Rx.Observable.range(39, 43)
+  .map(x => x * x)
+  .delay(4000)
+  .subscribe(createSubscribe('delay'));
+
+Rx.Observable.range(1,3)
+  .map(x => x+1)
+  .let( observer => observer.map(x => x * x))
+  .subscribe(createSubscribe('let'));
