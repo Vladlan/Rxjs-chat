@@ -404,14 +404,52 @@ function createSubscribe(name) {
 
 
 // #14
+
 // Rx.Observable.throw(new Error('smth wrong'))
 //   .catch(error => Rx.Observable.of(error))
 //   .subscribe(x => console.log(x));
 //
 // Rx.Observable.interval(500).take(2).subscribe(createSubscribe('interval'));
+//
+// const s1$ = Rx.Observable.throw(new Error('smt Wrong'));
+// const s2$ = Rx.Observable.interval(500).take(2);
+//
+// s1$.onErrorResumeNext(s2$)
+//   .subscribe(createSubscribe('onErrorResumeNext'));
 
-const s1$ = Rx.Observable.throw(new Error('smt Wrong'));
-const s2$ = Rx.Observable.interval(500).take(2);
+// #15
 
-s1$.onErrorResumeNext(s2$)
-  .subscribe(createSubscribe('onErrorResumeNext'));
+// const subject$ = new Rx.Subject();
+// const int$ = new Rx.Observable.interval(1000);
+//
+// int$
+//   .take(4)
+//   .subscribe(subject$);
+//
+// subject$.subscribe(createSubscribe('subject'));
+//
+// const subject$ = new Rx.BehaviorSubject('start');
+// subject$.subscribe(createSubscribe('subject'));
+//
+// subject$.next('2');
+// subject$.complete('finished');
+
+// const subject$ = new Rx.ReplaySubject(2);
+//
+// subject$.next(1);
+// subject$.next(2);
+// subject$.next(3);
+// subject$.next(4);
+// subject$.complete('finished');
+//
+// subject$.subscribe(createSubscribe('replaySubject'));
+
+const subject$ = new Rx.AsyncSubject();
+
+subject$.next(1);
+subject$.next(2);
+subject$.next(3);
+subject$.next(4);
+subject$.complete('finished');
+
+subject$.subscribe(createSubscribe('asyncSubject'));
