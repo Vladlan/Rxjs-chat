@@ -154,6 +154,7 @@ function createSubscribe(name) {
 
 
 //#7
+
 // Rx.Observable.of(1, 5, 'str')
 //   .first()
 //   .subscribe(createSubscribe('first'));
@@ -255,6 +256,7 @@ function createSubscribe(name) {
 
 
 // #9
+
 // Rx.Observable.interval(500)
 // .buffer(Rx.Observable.interval(3000))
 //   .take(5 )
@@ -276,27 +278,63 @@ function createSubscribe(name) {
 
 
 // #10
-Rx.Observable.of(2)
-  .defaultIfEmpty('I am empty stream')
-  .subscribe(createSubscribe('of'));
 
-Rx.Observable.from([1, 2, 3, 4, 5, 6])
-// .map(x => x * 2)
-  .every(x => x % 2 === 0)
-  .subscribe(createSubscribe('every'));
+// Rx.Observable.of(2)
+//   .defaultIfEmpty('I am empty stream')
+//   .subscribe(createSubscribe('of'));
+//
+// Rx.Observable.from([1, 2, 3, 4, 5, 6])
+// // .map(x => x * 2)
+//   .every(x => x % 2 === 0)
+//   .subscribe(createSubscribe('every'));
+//
+// Rx.Observable.from([101, 102, 103, 104])
+//   .do(x => console.log('x: ', x))
+//   .map(x => x * x)
+//   .subscribe(createSubscribe('do'));
+//
+//
+// Rx.Observable.range(39, 43)
+//   .map(x => x * x)
+//   .delay(4000)
+//   .subscribe(createSubscribe('delay'));
+//
+// Rx.Observable.range(1,3)
+//   .map(x => x+1)
+//   .let( observer => observer.map(x => x * x))
+//   .subscribe(createSubscribe('let'));
 
-Rx.Observable.from([101, 102, 103, 104])
-  .do(x => console.log('x: ', x))
-  .map(x => x * x)
-  .subscribe(createSubscribe('do'));
+// #11
+// const s1$ = Rx.Observable.of('Hello');
+// const s2$ = Rx.Observable.of('World');
+//
+// s1$.merge(s2$).subscribe(createSubscribe('merge'));
+// Rx.Observable.merge(s1$, s2$).subscribe(createSubscribe('merge2'));
+//
+// const s3$ = Rx.Observable.interval(1000).map(x => 'Stream 3: ' + x);
+// const s4$ = Rx.Observable.interval(2000).map(x => 'Stream 4: ' + x);
+//
+// Rx.Observable.merge(s3$, s4$).take(6).subscribe(createSubscribe('merge3'));
+//
+// Rx.Observable.range(1, 3)
+//   .map(x => Rx.Observable.range(1, 4))
+//   .mergeAll()
+//   .subscribe(createSubscribe('mergeAll'));
+
+const s1$ = Rx.Observable.from([1,2,3]);
+const s2$ = Rx.Observable.from([4,5,6]);
+
+Rx.Observable.concat(s1$, s2$).subscribe(createSubscribe('concat'));
+
+Rx.Observable.range(1, 3)
+  .map(x => Rx.Observable.range(x, 3))
+  .concatAll()
+  .subscribe(createSubscribe('concatAll'));
 
 
-Rx.Observable.range(39, 43)
-  .map(x => x * x)
-  .delay(4000)
-  .subscribe(createSubscribe('delay'));
 
-Rx.Observable.range(1,3)
-  .map(x => x+1)
-  .let( observer => observer.map(x => x * x))
-  .subscribe(createSubscribe('let'));
+
+
+
+
+
