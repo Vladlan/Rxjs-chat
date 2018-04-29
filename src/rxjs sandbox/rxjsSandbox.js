@@ -401,3 +401,17 @@ function createSubscribe(name) {
 // .combineLatest(t1$, t2$, t3$)
 //   .take(5)
 // .subscribe(createSubscribe('combineLatest'));
+
+
+// #14
+// Rx.Observable.throw(new Error('smth wrong'))
+//   .catch(error => Rx.Observable.of(error))
+//   .subscribe(x => console.log(x));
+//
+// Rx.Observable.interval(500).take(2).subscribe(createSubscribe('interval'));
+
+const s1$ = Rx.Observable.throw(new Error('smt Wrong'));
+const s2$ = Rx.Observable.interval(500).take(2);
+
+s1$.onErrorResumeNext(s2$)
+  .subscribe(createSubscribe('onErrorResumeNext'));
