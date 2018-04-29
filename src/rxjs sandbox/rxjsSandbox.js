@@ -339,12 +339,12 @@ function createSubscribe(name) {
 //     Rx.Observable.of(x + ' World')
 //       .subscribe(createSubscribe('mergeMap'))
 //   });
-
+//
 // Rx.Observable.of('Hello')
 //   .mergeMap(x => {return Rx.Observable.of(x + ' World')})
 //   .subscribe(createSubscribe('mergeMap'));
-
-
+//
+//
 // const promise = (data) => {
 //   return new Promise((resolve, reject) => {
 //     setTimeout( () => {
@@ -358,19 +358,46 @@ function createSubscribe(name) {
 //   return promise(x);
 //   })
 //   .subscribe(createSubscribe('promise'));
+//
+// Rx.Observable.range(1, 4)
+//   .concatMap( (x, i) => Rx.Observable.interval(200)
+//     .take(x)
+//     .map(i => i)
+//   )
+//   .subscribe(createSubscribe('concatMap'));
+//
+// Rx.Observable.range(1, 10)
+//   .concatMap( (x, i) => Rx.Observable.interval(100)
+//     .take(x)
+//     .map(q => i)
+//   )
+//   .subscribe(createSubscribe('concatMap'));
 
-Rx.Observable.range(1, 4)
-  .concatMap( (x, i) => Rx.Observable.interval(200)
-    .take(x)
-    .map(i => i)
-  )
-  .subscribe(createSubscribe('concatMap'));
+// #13
 
-Rx.Observable.range(1, 10)
-  .concatMap( (x, i) => Rx.Observable.interval(100)
-    .take(x)
-    .map(q => i)
-  )
-  .subscribe(createSubscribe('concatMap'));
-
-
+// const s1$ = Rx.Observable.of('Hello');
+// const s2$ = Rx.Observable.of('World');
+//
+// Rx.Observable
+//   .zip(s1$.delay(3000), s2$)
+//   .subscribe(createSubscribe('zip'));
+//
+// const interval$ = Rx.Observable.interval(1000);
+// Rx.Observable
+//   .zip(interval$, interval$.take(3), Rx.Observable.of('str'))
+//   .subscribe(createSubscribe('zip'));
+//
+// const int1$ = Rx.Observable.interval(1000);
+// const int2$ = Rx.Observable.interval(500);
+//
+// int1$.withLatestFrom(int2$).take(3)
+// .subscribe(createSubscribe('withLatestFrom'));
+//
+// const t1$ = Rx.Observable.timer(1000, 2000);
+// const t2$ = Rx.Observable.timer(2000, 2000);
+// const t3$ = Rx.Observable.timer(3000, 2000);
+//
+// Rx.Observable
+// .combineLatest(t1$, t2$, t3$)
+//   .take(5)
+// .subscribe(createSubscribe('combineLatest'));
