@@ -207,48 +207,69 @@ function createSubscribe(name) {
 
 // #8
 
-const items = [
-  {
-    id: '1',
-    item: 'some1'
-  },
-  {
-    id: '2',
-    item: 'some2'
-  },
-  {
-    id: '3',
-    item: 'some3'
-  },
-];
-
-Rx.Observable.range(0, 11)
-  .filter( x => x > 3)
-  .subscribe(createSubscribe('range'));
-
-Rx.Observable.fromEvent(document.querySelector('input'), 'keyup')
-.map( e => e.target.value)
-.subscribe(x => {
-  Rx.Observable.from(items)
-    .filter( s => s.item === x)
-    .subscribe(out => {
-      document.querySelector('div').innerHTML = `
-<h2>${out.item}</h2>
-<h4>${out.id}</h4>
-`
-    })
-});
-
+// const items = [
+//   {
+//     id: '1',
+//     item: 'some1'
+//   },
+//   {
+//     id: '2',
+//     item: 'some2'
+//   },
+//   {
+//     id: '3',
+//     item: 'some3'
+//   },
+// ];
+//
+// Rx.Observable.range(0, 11)
+//   .filter( x => x > 3)
+//   .subscribe(createSubscribe('range'));
+//
+// Rx.Observable.fromEvent(document.querySelector('input'), 'keyup')
+// .map( e => e.target.value)
+// .subscribe(x => {
+//   Rx.Observable.from(items)
+//     .filter( s => s.item === x)
+//     .subscribe(out => {
+//       document.querySelector('div').innerHTML = `
+// <h2>${out.item}</h2>
+// <h4>${out.id}</h4>
+// `
+//     })
+// });
+//
 // Rx.Observable.fromEvent(document.querySelector('input'), 'keyup')
 //   .map(e => e.target.value)
 //   .debounceTime(1500)
 //   .subscribe(createSubscribe('debounceTime'));
-
+//
 // Rx.Observable.fromEvent(document.querySelector('input'), 'keyup')
 //   .map(e => e.target.value)
 //   .distinct()
 //   .subscribe(createSubscribe('distinct'));
+//
+// Rx.Observable.from([1, 2, 3, 3, 3, 3, 5,6 ,124, 125125, 1241255, 1 ,2 ,3 ,1 ,2, 3])
+//   .distinctUntilChanged()
+//   .subscribe(createSubscribe('distinctUntilChange'));
 
-Rx.Observable.from([1, 2, 3, 3, 3, 3, 5,6 ,124, 125125, 1241255, 1 ,2 ,3 ,1 ,2, 3])
-  .distinctUntilChanged()
-  .subscribe(createSubscribe('distinctUntilChange'));
+
+//9
+// Rx.Observable.interval(500)
+// .buffer(Rx.Observable.interval(3000))
+//   .take(5 )
+// .subscribe(createSubscribe('buffer'));
+
+// Rx.Observable.interval(500)
+//   .bufferTime(3000)
+//   .take(2 )
+//   .subscribe(createSubscribe('bufferTime(x) === buffer(Rx.Observable.interval(x)'));
+
+// Rx.Observable.range(0, 40)
+//   .bufferCount(4)
+//   .subscribe(createSubscribe('bufferCount'));
+
+Rx.Observable.interval(1000)
+.buffer(Rx.Observable.fromEvent(document, 'click'))
+  .map( x => x.length )
+.subscribe(createSubscribe('buffer'));
