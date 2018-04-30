@@ -1,14 +1,11 @@
-import uuid from 'uuid/v1';
-
+import {v1 as uuid} from 'uuid';
 
 
 export class User {
   id: string;
 
-  constructor(
-    public name: string,
-    public avatarSrc: string
-  ) {
+  constructor(public name: string,
+              public avatarSrc: string) {
     this.id = uuid();
   }
 }

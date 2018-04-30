@@ -417,23 +417,25 @@ function createSubscribe(name) {
 // s1$.onErrorResumeNext(s2$)
 //   .subscribe(createSubscribe('onErrorResumeNext'));
 
-// #15
+/* #15*/
+// --SIMPLE SUBJECT
+const subject$ = new Rx.Subject();
+const int$ = new Rx.Observable.interval(1000);
 
-// const subject$ = new Rx.Subject();
-// const int$ = new Rx.Observable.interval(1000);
+int$
+  .take(4)
+  .subscribe(subject$);
+
+subject$.subscribe(createSubscribe('subject'));
+subject$.subscribe(console.log('listenning subject$'));
 //
-// int$
-//   .take(4)
-//   .subscribe(subject$);
-//
-// subject$.subscribe(createSubscribe('subject'));
-//
+// --BEHAVIORAL SUBJECT
 // const subject$ = new Rx.BehaviorSubject('start');
 // subject$.subscribe(createSubscribe('subject'));
 //
 // subject$.next('2');
 // subject$.complete('finished');
-
+//
 // const subject$ = new Rx.ReplaySubject(2);
 //
 // subject$.next(1);
@@ -443,13 +445,120 @@ function createSubscribe(name) {
 // subject$.complete('finished');
 //
 // subject$.subscribe(createSubscribe('replaySubject'));
+//
+// const subject$ = new Rx.AsyncSubject();
+//
+// subject$.next(1);
+// subject$.next(2);
+// subject$.next(3);
+// subject$.next(4);
+// subject$.complete('finished');
+//
+// subject$.subscribe(createSubscribe('asyncSubject'));
 
-const subject$ = new Rx.AsyncSubject();
+/*#source.share*/
+// let interval = Rx.Observable.interval(1000);
+//
+// let source = interval
+//   .take(2)
+//   .do(function (x) { console.log('Side effect'); });
+//
+// let published = source.share();
+//
+// // published.subscribe(createObserver('SourceA'));
+// // published.subscribe(createObserver('SourceB'));
+// //
+// // function createObserver(tag) {
+// //   return Rx.Observer.create(
+// //     function (x) { console.log('Next: ' + tag + x); },
+// //     function (err) { console.log('Error: ' + err); },
+// //     function () { console.log('Completed'); });
+// // }
+//
+// published.subscribe(createSubscribe('SA'));
+// published.subscribe(createSubscribe('SB'));
 
-subject$.next(1);
-subject$.next(2);
-subject$.next(3);
-subject$.next(4);
-subject$.complete('finished');
 
-subject$.subscribe(createSubscribe('asyncSubject'));
+/*Rx.Observable.prototype.scan(accumulator, [seed])*/
+// /* Without a seed */
+// var source = Rx.Observable.range(1, 4)                      //   #1        #2        #3      #4
+//   .scan(function (acc, x, i, source) { return acc + x; }); //=> 0_1 => 1, 1_2 => 3, 3_3=>6, 6_4=>10
+// source.subscribe(createSubscribe('source'));
+//
+// /* With a seed */
+// var source = Rx.Observable.range(1, 5)                       //    #1        #2        #3      #4        #5
+//   .scan(function (acc, x, i, source) { return acc * x; }, 1);//=> 1_1 => 1, 1_2 => 2, 2_3=>6, 6_4=>24, 24_5=>24
+//
+// source.subscribe(createSubscribe('source'));
+
+function createObserver(tag) {
+  return Rx.Observer.create(
+    function (x) {
+      console.log('Next: ' + tag + x);
+    },
+    function (err) {
+      console.log('Error: ' + err);
+    },
+    function () {
+      console.log('Completed');
+    });
+}
+
+/*Rx.Observable.prototype.publish([selector])*/
+// /* Without publish */
+// var interval = Rx.Observable.interval(1000);
+// var source = interval
+//   .take(2)
+//   .do(function (x) {
+//     console.log('Side effect');
+//   });
+//
+// source.subscribe(createObserver('SourceA'));
+// source.subscribe(createObserver('SourceB'));
+
+/* With publish */
+// var interval = Rx.Observable.interval(1000);
+//
+// var source = interval
+//   .take(2)
+//   .doAction(function (x) {
+//     console.log('Side effect');
+//   });
+//
+// var published = source.publish();
+//
+// published.subscribe(createObserver('SourceA'));
+// published.subscribe(createObserver('SourceB'));
+//
+// var connection = published.connect();
+
+/*Rx.Observable.prototype.replay([selector], [bufferSize], [window], [scheduler])*/
+// var interval = Rx.Observable.interval(1000);
+//
+// var source = interval
+//   .take(4)
+//   .do(function (x) {
+//     console.log('Side effect');
+//   });
+//
+// var published = source
+//   .replay(function (x) {
+//     return x.take(3).repeat(7);
+//   });
+//
+// published.subscribe(createObserver('SourceA'));
+// published.subscribe(createObserver('SourceB'));
+
+/*ConnectableObservable.prototype.refCount()*/
+// var interval = Rx.Observable.interval(1000);
+//
+// var source = interval
+//   .take(3)
+//   .doAction(function (x) {
+//     console.log('Side effect');
+//   });
+//
+// var published = source.publish().refCount();
+//
+// published.subscribe(createObserver('SourceA'));
+// published.subscribe(createObserver('SourceB'));

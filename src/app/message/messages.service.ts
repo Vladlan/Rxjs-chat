@@ -5,30 +5,66 @@ import {Observable} from 'rxjs/Observable';
 import {User} from '../user/user.model';
 import {Injectable} from '@angular/core';
 
+import 'rxjs/add/operator/scan';
+import 'rxjs/add/operator/publishReplay';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+
+
 const initialMessages: Message[] = [];
 
-type IMessagesOperation = ( messages: Message[] ) => Message[];
+
+// interface IMessagesOperation extends Function {
+//   (messages: Message[]): Message[];
+//   }
+type IMessagesOperation = ( messages: Message[] ) => Message[]; // => the same as interface above
+
 
 @Injectable()
 export class MessagesService {
+  // `updates` receives _operations_ to be applied to our `messages`
+  // it's a way we can perform changes on *all* messages (that are currently
+  // stored in `messages`)
   updates: Subject<any> = new Subject<any>();
   create: Subject<Message> = new Subject<Message>();
+  // a stream that publishes new messages only once
   newMessages: Subject<Message> = new Subject<Message>();
+  // `messages` is a stream that emits an array of the most up to date messages
   messages: Observable<Message[]>;
   markThreadAsRead: Subject<any> = new Subject<any>();
 
   constructor() {
     this.messages = this.updates
+    // watch the updates and accumulate operations on the messages
       .scan((messages: Message[], operation: IMessagesOperation) => {
-      return operation(messages);
-    },
-      initialMessages)
+          console.log('scaned');
+          return operation(messages);
+        },
+        initialMessages)
+    // make sure we can share the most recent list of messages across anyone
+    // who's interested in subscribing and cache the last known list of
+    // messages
       .publishReplay(1)
       .refCount();
 
+    // `create` takes a Message and then puts an operation (the inner function)
+    // on the `updates` stream to add the Message to the list of messages.
+    //
+    // That is, for each item that gets added to `create` (by using `next`)
+    // this stream emits a concat operation function.
+    //
+    // Next we subscribe `this.updates` to listen to this stream, which means
+    // that it will receive each operation that is created
+    //
+    // Note that it would be perfectly acceptable to simply modify the
+    // "addMessage" function below to simply add the inner operation function to
+    // the update stream directly and get rid of this extra action stream
+    // entirely. The pros are that it is potentially clearer. The cons are that
+    // the stream is no longer composable.
     this.create
-      .map( function (message: Message): IMessagesOperation {
+      .map(function (message: Message): IMessagesOperation {
         return (messages: Message[]) => {
+          console.log('created message: ', message);
           return messages.concat(message);
         };
       })
@@ -37,13 +73,19 @@ export class MessagesService {
     this.newMessages
       .subscribe(this.create);
 
+    // similarly, `markThreadAsRead` takes a Thread and then puts an operation
+    // on the `updates` stream to mark the Messages as read
     this.markThreadAsRead
-      .map( (thread: Thread) => {
+      .map((thread: Thread) => {
         return (messages: Message[]) => {
-          return messages.map( (message: Message) => {
-            if (message.thread.id === thread.id ) {
+          return messages.map((message: Message) => {
+            // note that we're manipulating `message` directly here. Mutability
+            // can be confusing and there are lots of reasons why you might want
+            // to, say, copy the Message object or some other 'immutable' here
+            if (message.thread.id === thread.id) {
               message.isRead = true;
             }
+            console.log('markedThreadAsRead. thread.name = ', thread.name);
             return message;
           });
         };
@@ -51,18 +93,21 @@ export class MessagesService {
       .subscribe(this.updates);
   }
 
+// an imperative function call to this action stream
   addMessage(message: Message): void {
+    console.log('addedMessage: ', message.text);
     this.newMessages.next(message);
   }
 
   messagesForThreadUser(thread: Thread, user: User): Observable<Message> {
     return this.newMessages
       .filter((message: Message) => {
-        return (message.thread.id === thread.id ) && (message.author.id !== user.id);
+        // belongs to this thread
+        return (message.thread.id === thread.id ) &&
+          // and isn't authored by this user
+          (message.author.id !== user.id);
       });
   }
 }
 
-export const messagesServiceInjectables: Array<any> = [
-  MessagesService
-];
+export const messagesServiceInjectables: Array<any> = [MessagesService];
