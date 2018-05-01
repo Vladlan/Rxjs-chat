@@ -392,15 +392,15 @@ function createSubscribe(name) {
 //
 // int1$.withLatestFrom(int2$).take(3)
 // .subscribe(createSubscribe('withLatestFrom'));
-//
-// const t1$ = Rx.Observable.timer(1000, 2000);
-// const t2$ = Rx.Observable.timer(2000, 2000);
-// const t3$ = Rx.Observable.timer(3000, 2000);
-//
-// Rx.Observable
-// .combineLatest(t1$, t2$, t3$)
-//   .take(5)
-// .subscribe(createSubscribe('combineLatest'));
+
+const t1$ = Rx.Observable.timer(1000, 2000);
+const t2$ = Rx.Observable.timer(2000, 2000);
+const t3$ = Rx.Observable.timer(3000, 2000);
+
+Rx.Observable
+.combineLatest(t1$, t2$, t3$)
+  .take(5)
+.subscribe(createSubscribe('combineLatest'));
 
 
 // #14
@@ -419,15 +419,15 @@ function createSubscribe(name) {
 
 /* #15*/
 // --SIMPLE SUBJECT
-const subject$ = new Rx.Subject();
-const int$ = new Rx.Observable.interval(1000);
-
-int$
-  .take(4)
-  .subscribe(subject$);
-
-subject$.subscribe(createSubscribe('subject'));
-subject$.subscribe(console.log('listenning subject$'));
+// const subject$ = new Rx.Subject();
+// const int$ = new Rx.Observable.interval(1000);
+//
+// int$
+//   .take(4)
+//   .subscribe(subject$);
+//
+// subject$.subscribe(createSubscribe('subject'));
+// subject$.subscribe(console.log('listenning subject$'));
 //
 // --BEHAVIORAL SUBJECT
 // const subject$ = new Rx.BehaviorSubject('start');

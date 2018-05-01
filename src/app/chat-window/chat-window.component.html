@@ -1,0 +1,28 @@
+<div class="my-3 p-3 bg-white rounded box-shadow">
+  <h6 class="border-bottom border-gray pb-2 mb-0">Chat - {{currentThread.name}}</h6>
+
+  <div class="panel-body msg-container-base ">
+    <app-chat-message
+      *ngFor="let message of messages | async"
+      [message]="message">
+    </app-chat-message>
+  </div>
+
+  <div class="panel-footer">
+    <div class="input-group">
+      <input type="text"
+             class="form-control mr-sm-2"
+             placeholder="Write your message here..."
+             (keydown.enter)="onEnter($event)"
+             [(ngModel)]="draftMessage.text"/>
+      <span class="input-group-btn">
+            <button class="btn btn btn-outline-dark my-2 my-sm-0"
+                    (click)="onEnter($event)"
+            >
+              Send
+            </button>
+          </span>
+    </div>
+  </div>
+
+</div>

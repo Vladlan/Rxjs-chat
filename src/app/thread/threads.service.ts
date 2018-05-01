@@ -16,7 +16,7 @@ export class ThreadsService {
   // `orderedThreads` contains a newest-first chronological list of threads
   orderedThreads: Observable<Thread[]>;
   // `currentThread contains the currently selected thread
-  currentThread: Subject<Thread> = new BehaviorSubject(<Thread>(new Thread());
+  currentThread: Subject<Thread> = new BehaviorSubject( <Thread>( new Thread() ) );
   // `currentThreadMessages` contains the set of messages for currently selected thread
   currentThreadMessages: Observable<Message[]>;
 

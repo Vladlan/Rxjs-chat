@@ -1,0 +1,10 @@
+
+<div class="my-3 p-3 bg-white rounded box-shadow">
+  <h6 class="border-bottom border-gray pb-2 mb-0">Threads</h6>
+
+      <app-chat-thread
+        *ngFor="let thread of threads | async"
+        [thread]="thread">
+      </app-chat-thread>
+
+</div>
