@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import {User} from '../user/user.model';
 import {Message} from '../message/message.model';
 import {UsersService} from '../user/users.service';

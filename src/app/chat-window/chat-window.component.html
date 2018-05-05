@@ -1,5 +1,5 @@
 <div class="my-3 p-3 bg-white rounded box-shadow">
-  <h6 class="border-bottom border-gray pb-2 mb-0">Chat - {{currentThread.name}}</h6>
+  <h6 class="pb-2 mb-0">Chat - {{currentThread.name}}</h6>
 
   <div class="panel-body msg-container-base ">
     <app-chat-message
@@ -11,7 +11,7 @@
   <div class="panel-footer">
     <div class="input-group">
       <input type="text"
-             class="form-control mr-sm-2"
+             class="form-control mr-sm-2 inputInChatWindow"
              placeholder="Write your message here..."
              (keydown.enter)="onEnter($event)"
              [(ngModel)]="draftMessage.text"/>

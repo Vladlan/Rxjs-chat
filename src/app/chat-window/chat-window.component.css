@@ -1,0 +1,6 @@
+.inputInChatWindow:focus {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-color: #343a40;
+  box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5);
+}
